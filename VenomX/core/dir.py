@@ -1,14 +1,10 @@
 import logging
 import os
-import sys
 import time
-
-from config import TEMP_DB_FOLDER
 
 
 BASE_DIR = "/tmp/VenomX"
 
-ASSETS_FOLDER = os.path.join(BASE_DIR, "assets")
 DOWNLOADS_FOLDER = os.path.join(BASE_DIR, "downloads")
 CACHE_FOLDER = os.path.join(BASE_DIR, "cache")
 TEMP_DB_PATH = os.path.join(BASE_DIR, "temp_db")
@@ -27,7 +23,7 @@ def dirr():
             "assets Folder not Found. Please clone or fork repository again."
         )
 
-    # Clean old files from downloads
+    # Clean old download files
     _clean_downloads(DOWNLOADS_FOLDER)
 
     logging.info("Directories Updated.")
