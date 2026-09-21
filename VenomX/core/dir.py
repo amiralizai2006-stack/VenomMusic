@@ -11,14 +11,15 @@ from config import TEMP_DB_FOLDER
 def dirr():
     assets_folder = "assets"
 
-    # Deplexo/container filesystem: /app is read-only.
-    # Use /tmp for all runtime-writable folders.
+    # Deplexo uses a read-only application filesystem.
+    # /tmp is writable and suitable for temporary runtime files.
     runtime_folder = "/tmp/VenomX"
+
     downloads_folder = os.path.join(runtime_folder, "downloads")
     cache_folder = os.path.join(runtime_folder, "cache")
     temp_db_folder = os.path.join(runtime_folder, "temp_db")
 
-    # assets is part of the repository and should remain read-only.
+    # Assets are part of the repository and should already exist.
     if not os.path.isdir(assets_folder):
         logging.warning(
             f"{assets_folder} Folder not Found. Please clone or fork repository again."
@@ -30,7 +31,7 @@ def dirr():
     os.makedirs(cache_folder, exist_ok=True)
     os.makedirs(temp_db_folder, exist_ok=True)
 
-    # Clean stale downloads older than 1 hour on startup.
+    # Clean stale downloads older than 1 hour.
     _clean_downloads(downloads_folder)
 
     logging.info("Directories Updated.")
