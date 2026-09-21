@@ -1,5 +1,3 @@
-# All rights reserved.
-#
 import logging
 import os
 import sys
@@ -8,53 +6,48 @@ import time
 from config import TEMP_DB_FOLDER
 
 
+BASE_DIR = "/tmp/VenomX"
+
+ASSETS_FOLDER = os.path.join(BASE_DIR, "assets")
+DOWNLOADS_FOLDER = os.path.join(BASE_DIR, "downloads")
+CACHE_FOLDER = os.path.join(BASE_DIR, "cache")
+TEMP_DB_PATH = os.path.join(BASE_DIR, "temp_db")
+
+
 def dirr():
-    assets_folder = "assets"
+    # Create writable directories
+    os.makedirs(BASE_DIR, exist_ok=True)
+    os.makedirs(DOWNLOADS_FOLDER, exist_ok=True)
+    os.makedirs(CACHE_FOLDER, exist_ok=True)
+    os.makedirs(TEMP_DB_PATH, exist_ok=True)
 
-    # Deplexo uses a read-only application filesystem.
-    # /tmp is writable and suitable for temporary runtime files.
-    runtime_folder = "/tmp/VenomX"
-
-    downloads_folder = os.path.join(runtime_folder, "downloads")
-    cache_folder = os.path.join(runtime_folder, "cache")
-    temp_db_folder = os.path.join(runtime_folder, "temp_db")
-
-    # Assets are part of the repository and should already exist.
-    if not os.path.isdir(assets_folder):
+    # Check assets from the application directory
+    if not os.path.isdir("assets"):
         logging.warning(
-            f"{assets_folder} Folder not Found. Please clone or fork repository again."
+            "assets Folder not Found. Please clone or fork repository again."
         )
-        sys.exit()
 
-    # Create writable runtime directories.
-    os.makedirs(downloads_folder, exist_ok=True)
-    os.makedirs(cache_folder, exist_ok=True)
-    os.makedirs(temp_db_folder, exist_ok=True)
-
-    # Clean stale downloads older than 1 hour.
-    _clean_downloads(downloads_folder)
+    # Clean old files from downloads
+    _clean_downloads(DOWNLOADS_FOLDER)
 
     logging.info("Directories Updated.")
 
 
 def _clean_downloads(folder):
-    """Remove download files older than 1 hour to prevent disk fill."""
+    """Remove download files older than 1 hour."""
     try:
         now = time.time()
         cutoff = now - 3600
         removed = 0
 
-        for f in os.listdir(folder):
-            fp = os.path.join(folder, f)
+        for filename in os.listdir(folder):
+            filepath = os.path.join(folder, filename)
 
-            if os.path.isfile(fp):
+            if os.path.isfile(filepath):
                 try:
-                    mtime = os.path.getmtime(fp)
-
-                    if mtime < cutoff:
-                        os.remove(fp)
+                    if os.path.getmtime(filepath) < cutoff:
+                        os.remove(filepath)
                         removed += 1
-
                 except Exception:
                     pass
 
