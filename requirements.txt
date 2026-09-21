@@ -10,7 +10,7 @@ hachoir
 heroku3
 httpx[http2]
 motor
-pillow==9.5.0
+pillow>=10.4.0
 psutil
 pytube
 pykeyboard
