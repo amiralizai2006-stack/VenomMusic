@@ -2,7 +2,6 @@ import logging
 import os
 import time
 
-
 BASE_DIR = "/tmp/VenomX"
 
 ASSETS_FOLDER = os.path.join(BASE_DIR, "assets")
@@ -10,52 +9,49 @@ DOWNLOADS_FOLDER = os.path.join(BASE_DIR, "downloads")
 CACHE_FOLDER = os.path.join(BASE_DIR, "cache")
 TEMP_DB_PATH = os.path.join(BASE_DIR, "temp_db")
 
-
 def dirr():
-    # Create writable directories
-    os.makedirs(BASE_DIR, exist_ok=True)
-    os.makedirs(DOWNLOADS_FOLDER, exist_ok=True)
-    os.makedirs(CACHE_FOLDER, exist_ok=True)
-    os.makedirs(TEMP_DB_PATH, exist_ok=True)
+# Create writable directories
+os.makedirs(BASE_DIR, exist_ok=True)
+os.makedirs(DOWNLOADS_FOLDER, exist_ok=True)
+os.makedirs(CACHE_FOLDER, exist_ok=True)
+os.makedirs(TEMP_DB_PATH, exist_ok=True)
 
-    # Assets are stored in the application directory
-    if not os.path.isdir("assets"):
-        logging.warning(
-            "assets Folder not Found. Please clone or fork repository again."
-        )
+# Assets are stored in the application directory  
+if not os.path.isdir("assets"):  
+    logging.warning(  
+        "assets Folder not Found. Please clone or fork repository again."  
+    )  
 
-    # Clean old download files
-    _clean_downloads(DOWNLOADS_FOLDER)
+# Clean old download files  
+_clean_downloads(DOWNLOADS_FOLDER)  
 
-    logging.info("Directories Updated.")
-
+logging.info("Directories Updated.")
 
 def _clean_downloads(folder):
-    """Remove download files older than 1 hour."""
-    try:
-        now = time.time()
-        cutoff = now - 3600
-        removed = 0
+"""Remove download files older than 1 hour."""
+try:
+now = time.time()
+cutoff = now - 3600
+removed = 0
 
-        for filename in os.listdir(folder):
-            filepath = os.path.join(folder, filename)
+for filename in os.listdir(folder):  
+        filepath = os.path.join(folder, filename)  
 
-            if os.path.isfile(filepath):
-                try:
-                    if os.path.getmtime(filepath) < cutoff:
-                        os.remove(filepath)
-                        removed += 1
-                except Exception:
-                    pass
+        if os.path.isfile(filepath):  
+            try:  
+                if os.path.getmtime(filepath) < cutoff:  
+                    os.remove(filepath)  
+                    removed += 1  
+            except Exception:  
+                pass  
 
-        if removed:
-            logging.info(
-                f"Cleaned {removed} stale download(s) from {folder}"
-            )
+    if removed:  
+        logging.info(  
+            f"Cleaned {removed} stale download(s) from {folder}"  
+        )  
 
-    except Exception as e:
-        logging.warning(f"Download cleanup failed: {e}")
+except Exception as e:  
+    logging.warning(f"Download cleanup failed: {e}")
 
-
-if __name__ == "__main__":
-    dirr()
+if name == "main":
+dirr()
